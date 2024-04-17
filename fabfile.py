@@ -6,6 +6,7 @@ path = "cd bachelorproef/bachelorproef--actorsystem_deployment_tool"
 @task
 def deploy(c):
     result = c.run('hostname')
+    c.run("tmux new-session -d 'python3 main.py 1900'", pty= False)
     print(result)
     for hostname in hostnames:
         connection = Connection(hostname)
@@ -19,4 +20,4 @@ def retract(c):
         connection = Connection(hostname)
         with connection.prefix(path):
             connection.run("hostname")
-            connection.run("python3 stop_actorsystem.py 1900")
+            connection.run("python3 stop_actorsystem.py 1900", pty=False)
