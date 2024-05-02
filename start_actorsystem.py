@@ -19,4 +19,4 @@ if __name__ == "__main__":
     reg = asys.createActor(RegisterToLeader)
     reg = asys.ask(reg, "register")
     ping = asys.createActor(Ping)
-    asys.tell(reg, f"register {ping}")
+    asys.tell(reg, ping)

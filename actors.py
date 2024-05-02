@@ -5,6 +5,7 @@ from thespian.actors import (
     ActorSystem,
     ActorSystemConventionUpdate,
     requireCapability,
+    ActorAddress,
 )
 import socket
 
@@ -61,6 +62,8 @@ class RegistrationActor(Actor):
                 for capability in msg.remoteCapabilities:
                     if capability in HOSTNAMES:
                         del self.remoteSystems[capability]
+        elif isinstance(msg, ActorAddress):
+            self.send(msg, "ping")
         else:
             logging.info(self.myAddress)
             logging.info(msg)
