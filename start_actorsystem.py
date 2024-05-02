@@ -1,8 +1,11 @@
-import logging
-from thespian.actors import ActorSystem, Actor
+from thespian.actors import ActorSystem
 import sys
 
-from actors import Ping, RegisterToLeader, RegistrationActor
+from actors import (
+    Ping,
+    RegisterRemoteTopLevelActorToLeader,
+    RemoteTopLevelActor,
+)
 
 
 if __name__ == "__main__":
@@ -16,7 +19,5 @@ if __name__ == "__main__":
         + list(zip(capability_names, [True] * len(capability_names)))
     )
     asys = ActorSystem("multiprocTCPBase", capabilities=capabilities)
-    reg = asys.createActor(RegisterToLeader)
-    reg = asys.ask(reg, "register")
-    ping = asys.createActor(Ping)
-    asys.tell(reg, ping)
+    reg = asys.createActor(RemoteTopLevelActor)
+    asys.tell(reg, RegisterRemoteTopLevelActorToLeader(capability_names[0], reg))

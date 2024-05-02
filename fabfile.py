@@ -25,7 +25,9 @@ def deploy(c):
         connection = Connection(hostname)
         with connection.prefix(path):
             result = connection.run("hostname")
-            capabilities = f'"{hostname}, sensor"'
+            capabilities = (
+                f'"{hostname}, sensor"' if hostname != "isabelle-d" else f'"{hostname}"'
+            )
             connection.run(
                 f"tmux new-session -d 'python3 start_actorsystem.py 1900 {capabilities}'",
                 pty=False,
