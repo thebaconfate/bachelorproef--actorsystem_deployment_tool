@@ -3,6 +3,7 @@ from thespian.actors import Actor, ActorSystem, ActorSystemConventionUpdate
 import sys
 
 from actors import RegistrationActor
+
 logcfg = {
     "version": 1,
     "formatters": {"normal": {"format": "%(levelname)-8s %(message)s"}},
@@ -18,8 +19,6 @@ logcfg = {
 }
 
 
-
-
 if __name__ == "__main__":
     portnum = int(sys.argv[1])
     capability_names = (sys.argv + [""])[2].split(", ")
@@ -30,7 +29,8 @@ if __name__ == "__main__":
         ]
         + list(zip(capability_names, [True] * len(capability_names)))
     )
-    asys : ActorSystem = ActorSystem("multiprocTCPBase",logDefs=logcfg, capabilities=capabilities)
-    reg = asys.createActor(RegistrationActor)
-    asys.tell(reg, "register")
-    
+    asys: ActorSystem = ActorSystem(
+        "multiprocTCPBase", logDefs=logcfg, capabilities=capabilities
+    )
+    reg = asys.createActor(RegistrationActor, globalName="registration")
+    asys.tell(reg, "notifyOnSystemRegistrationChanges")
